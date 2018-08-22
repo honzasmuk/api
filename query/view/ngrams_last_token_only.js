@@ -1,5 +1,5 @@
 var peliasQuery = require('pelias-query'),
-    ngrams_strict = require('./ngrams_strict');
+    ngrams_strict_multilanguage = require('./ngrams_strict_multilanguage');
 
 /**
   Ngrams view which trims the 'input:name' and only uses the LAST TOKEN.
@@ -29,7 +29,7 @@ module.exports = function( vs ){
   // return the view rendered using the copy
   return {
     'constant_score': {
-      'query': ngrams_strict( vsCopy )
+      'query': ngrams_strict_multilanguage( vsCopy )
     }
   };
 };

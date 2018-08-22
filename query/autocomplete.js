@@ -7,6 +7,7 @@ const logger = require('pelias-logger').get('api');
 // additional views (these may be merged in to pelias/query at a later date)
 var views = {
   ngrams_strict:              require('./view/ngrams_strict'),
+  ngrams_strict_multilanguage:require('./view/ngrams_strict_multilanguage'),
   ngrams_last_token_only:     require('./view/ngrams_last_token_only'),
   phrase_first_tokens_only:   require('./view/phrase_first_tokens_only'),
   pop_subquery:               require('./view/pop_subquery'),
@@ -41,7 +42,7 @@ query.score( peliasQuery.view.admin('neighbourhood') );
 
 // scoring boost
 query.score( views.boost_exact_matches );
-query.score( peliasQuery.view.focus( views.ngrams_strict ) );
+query.score( peliasQuery.view.focus( views.ngrams_strict_multilanguage ) );
 query.score( peliasQuery.view.popularity( views.pop_subquery ) );
 query.score( peliasQuery.view.population( views.pop_subquery ) );
 
@@ -132,6 +133,10 @@ function generateQuery( clean ){
   // run the address parser
   if( clean.parsed_text ){
     textParser( clean.parsed_text, vs );
+  }
+
+  if( check.object(clean.lang)) {
+    vs.var('lang', clean.lang.iso6391);
   }
 
   logger.info(logStr);

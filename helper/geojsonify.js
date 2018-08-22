@@ -51,8 +51,13 @@ function geojsonifyPlace(params, place) {
     lng: parseFloat(place.center_point.lon)
   };
 
+  var lang = params.lang.iso6391;
+  var nameFieldLang = 'name.' + lang;
+
   // assign name, logging a warning if it doesn't exist
-  if (_.has(place, 'name.default')) {
+  if (_.has(place, nameFieldLang)) {
+    doc.name = _.get(place, nameFieldLang);
+  } else if (_.has(place, 'name.default')) {
     doc.name = field.getStringValue(place.name.default);
   } else {
     logger.warn(`doc ${doc.gid} does not contain name.default`);
